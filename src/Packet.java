@@ -1,8 +1,14 @@
 import java.util.*;
-public abstract class Packet implements Queue{
-public static int packetCount;
-private int id, packetSize, timeArrive, timeToDest;
+public class Packet extends LinkedList{
+public static int packetCount=0;
+private int id, packetSize, timeArrive=0, timeToDest=0;
 public Packet(){}
+public Packet(int id, int packetSize,int timeArrive){
+	this.setId(id);
+	this.setPacketSize(packetSize);
+	this.setTimeToDest(this.packetSize/100);
+	this.setTimeArrive(timeArrive);
+}
 public int getId(){
 	return this.id;
 }
@@ -27,9 +33,10 @@ public void setTimeArrive(int timeArrive){
 public void setTimeToDest(int timeToDest){
 	this.timeToDest = timeToDest;
 }
+public static int getPacketCounter(){
+	return ++packetCount;
+}
 public String toString(){
-	String a = "";
-	a.format("[%d, %d, %d]", id, timeArrive, timeToDest);
-	return a;
+	return String.format("[%d, %d, %d]", this.id, this.timeArrive, this.timeToDest);
 }
 }
