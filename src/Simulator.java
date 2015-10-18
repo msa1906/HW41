@@ -14,7 +14,7 @@ import java.util.*;
 public class Simulator {
 	private Router dispatcher = new Router(1);
 	private LinkedList<Router> routers = new LinkedList<Router>();
-	private int totalServiceTimePerPacket = 0, totalServiceTime = 0, totalPacketsArrived = 0, packetsDropped = 0,
+	private int totalServiceTimePerPacket = 0, totalServiceTime = 1, totalPacketsArrived = 0, packetsDropped = 0,
 			numIntRouters, maxBufferSize, maxPacketSize, minPacketSize, bandwidth, duration;
 	private double arrivalProb;
 
@@ -110,8 +110,7 @@ public class Simulator {
 		for (int k = 0; k < this.numIntRouters; k++) {
 			routers.add(new Router(k + 1));
 		}
-		while (this.totalServiceTime < this.duration) {
-			this.totalServiceTime++;
+		do{
 			System.out.printf("Time: %d%n", this.totalServiceTime);
 			num = (int) ((this.numIntRouters + 1) * Math.random());
 			for (int k = 0; k < num; k++) {
@@ -122,7 +121,6 @@ public class Simulator {
 						((Packet) this.dispatcher.getLast()).getPacketSize());
 			}
 			while (!this.dispatcher.isEmpty()) {
-				int routerId;
 				try {
 					System.out.printf("Packet %d sent to Router %d.%n", ((Packet) this.dispatcher.getFirst()).getId(),
 							routers.get(Router.sendPacketTo(routers, this.maxBufferSize)).getId());
@@ -141,11 +139,11 @@ public class Simulator {
 
 			}
 			this.status();
-		}
-		System.out.println("Simulation ending...");
+		}while (++this.totalServiceTime-1 < this.duration);
+			System.out.println("Simulation ending...");
 		System.out.printf(
 				"Total service time: %d%nTotal packets served: %d%nAverage service time per packet: %.3f%nTotal packets dropped: %d%n",
-				this.totalServiceTime, this.totalPacketsArrived,
+				this.totalServiceTime-1, this.totalPacketsArrived,
 				(double) this.totalServiceTimePerPacket / this.totalPacketsArrived, this.packetsDropped);
 		return (double) this.totalServiceTimePerPacket / this.totalPacketsArrived;
 	}
@@ -161,33 +159,33 @@ public class Simulator {
 			Simulator a = new Simulator();
 			System.out.println("Starting simulator...");
 			System.out.println("Enter the number of Intermediate routers:");
-			/*
-			 * a.setNumIntRouters(input.nextInt()); a.setNumIntRouters(4);
-			 * a.setArrivalProb(0.5); a.setMaxBufferSize(5);
-			 * a.setMinPacketSize(500); a.setMaxPacketSize(1500);
-			 * a.setBandwidth(2); a.setDuration(25);
-			 * 
-			 * test data
-			 */
+			//a.setNumIntRouters(input.nextInt());
+			
+			 a.setNumIntRouters(4); a.setArrivalProb(0.5);
+			 a.setMaxBufferSize(5); a.setMinPacketSize(500);
+			 a.setMaxPacketSize(1500); a.setBandwidth(2); a.setDuration(25);
+			 
+			 //test data
+			 
 			System.out.println("Enter the arrival probability of a packet:");
-			a.setArrivalProb(input.nextDouble());
+			//a.setArrivalProb(input.nextDouble());
 			System.out.println("Enter the maximum buffer size of a router:");
-			a.setMaxBufferSize(input.nextInt());
+			//a.setMaxBufferSize(input.nextInt());
 			System.out.println("Enter the minimum size of a packet:");
-			// a.setMinPacketSize(input.nextInt());
+			//a.setMinPacketSize(input.nextInt());
 			System.out.println("Enter the maximum size of a packet:");
-			a.setMaxPacketSize(input.nextInt());
+			//a.setMaxPacketSize(input.nextInt());
 			System.out.println("Enter the bandwidth size:");
-			a.setBandwidth(input.nextInt());
+			//a.setBandwidth(input.nextInt());
 			System.out.println("Enter the simulation duration:");
-			a.setDuration(input.nextInt());
-			double b = a.simulate();
+			//a.setDuration(input.nextInt());
+			a.simulate();
 			System.out.println("Quit?(y/any key for no)");
 			if (input.nextLine().equals("y"))
 				flag = false;
 		}
 		while (flag)
 			;
-
+		input.close();
 	}
 }

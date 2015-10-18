@@ -13,7 +13,6 @@ import java.util.*;
 public class Router extends LinkedList {
 	private int id;
 	private LinkedList<Packet> packets = new Packet();
-
 	public int getId() {
 		return this.id;
 	}
