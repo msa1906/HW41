@@ -7,8 +7,7 @@
 * @author Mingtong Wu
 *    e-mail: mingtong.wu@stonybrook.edu
 *    Stony Brook ID:110033615
-**/
-package simulator;
+**/package javafxapplication5;
 import java.util.*;
 
 public class Packet extends LinkedList {

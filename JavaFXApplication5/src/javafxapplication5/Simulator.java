@@ -8,17 +8,10 @@
 *    e-mail: mingtong.wu@stonybrook.edu
 *    Stony Brook ID:110033615
 **/
-package simulator;
-
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-
+package javafxapplication5;
 import java.util.*;
 
-public class Simulator extends Application {
+public class Simulator {
 	private Router dispatcher = new Router(1);
 	private LinkedList<Router> routers = new LinkedList<Router>();
 	private int totalServiceTimePerPacket = 0, totalServiceTime = 1, totalPacketsArrived = 0, packetsDropped = 0,
@@ -112,30 +105,31 @@ public class Simulator extends Application {
 
 	}
 
-	public double simulate() {
+	public String simulate() {
 		int num = 0;
+                String a="";
 		for (int k = 0; k < this.numIntRouters; k++) {
 			routers.add(new Router(k + 1));
 		}
 		do{
-			System.out.printf("Time: %d%n", this.totalServiceTime);
+			a+=String.format("Time: %d%n", this.totalServiceTime);
 			num = (int) ((this.numIntRouters + 1) * Math.random());
 			for (int k = 0; k < num; k++) {
 				this.dispatcher.addLast(new Packet(Packet.getPacketCounter(),
 						this.randInt(this.minPacketSize, this.maxPacketSize), this.totalServiceTime));
-				System.out.printf("Packet %d arrives at dispatcher with size %d.%n",
+				a+=String.format("Packet %d arrives at dispatcher with size %d.%n",
 						((Packet) this.dispatcher.getLast()).getId(),
 						((Packet) this.dispatcher.getLast()).getPacketSize());
 			}
 			while (!this.dispatcher.isEmpty()) {
 				try {
-					System.out.printf("Packet %d sent to Router %d.%n", ((Packet) this.dispatcher.getFirst()).getId(),
+					a+=String.format("Packet %d sent to Router %d.%n", ((Packet) this.dispatcher.getFirst()).getId(),
 							routers.get(Router.sendPacketTo(routers, this.maxBufferSize)).getId());
 					routers.get(Router.sendPacketTo(routers, this.maxBufferSize)).getPackets()
 							.addLast((Packet) this.dispatcher.pollFirst());
 					this.totalPacketsArrived++;
 				} catch (Exception e) {
-					System.out.printf("Network is congested. Packet %d is dropped.%n",
+					a+=String.format("Network is congested. Packet %d is dropped.%n",
 							((Packet) this.dispatcher.getFirst()).getId());
 					this.dispatcher.pollFirst();
 					this.packetsDropped++;
@@ -147,33 +141,15 @@ public class Simulator extends Application {
 			}
 			this.status();
 		}while (++this.totalServiceTime-1 < this.duration);
-			System.out.println("Simulation ending...");
-		System.out.printf(
+			a+=String.format("Simulation ending...");
+		a+=String.format(
 				"Total service time: %d%nTotal packets served: %d%nAverage service time per packet: %.3f%nTotal packets dropped: %d%n",
 				this.totalServiceTime-1, this.totalPacketsArrived,
 				(double) this.totalServiceTimePerPacket / this.totalPacketsArrived, this.packetsDropped);
-		return (double) this.totalServiceTimePerPacket / this.totalPacketsArrived;
+		return a;
 	}
 
 	private int randInt(int minVal, int maxVal) {
 		return (int) (Math.random() * (maxVal + 1 - minVal) + minVal);
 	}
-    @Override
-    public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("Simulator.fxml"));
-        
-        Scene scene = new Scene(root);
-        stage.setTitle("Simulator");
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        launch(args);
-    }
-    
 }
-	
