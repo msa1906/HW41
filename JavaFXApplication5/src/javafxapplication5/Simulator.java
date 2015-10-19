@@ -12,6 +12,7 @@ package javafxapplication5;
 import java.util.*;
 
 public class Simulator {
+          public static String a="";
 	private Router dispatcher = new Router(1);
 	private LinkedList<Router> routers = new LinkedList<Router>();
 	private int totalServiceTimePerPacket = 0, totalServiceTime = 1, totalPacketsArrived = 0, packetsDropped = 0,
@@ -100,14 +101,14 @@ public class Simulator {
 
 	private void status() {
 		for (int k = 0; k < this.numIntRouters; k++) {
-			System.out.println(routers.get(k).toString());
+			a+=String.format(routers.get(k).toString());
 		}
 
 	}
 
 	public String simulate() {
 		int num = 0;
-                String a="";
+                
 		for (int k = 0; k < this.numIntRouters; k++) {
 			routers.add(new Router(k + 1));
 		}
@@ -134,11 +135,10 @@ public class Simulator {
 					this.dispatcher.pollFirst();
 					this.packetsDropped++;
 				}
-				for (int k = 0; k < this.numIntRouters; k++) {
+			}
+                        for (int k = 0; k < this.numIntRouters; k++) {
 					this.totalServiceTimePerPacket += this.routers.get(k).check(this.totalServiceTime);
 				}
-
-			}
 			this.status();
 		}while (++this.totalServiceTime-1 < this.duration);
 			a+=String.format("Simulation ending...");

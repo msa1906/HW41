@@ -133,10 +133,9 @@ public class Simulator {
 					this.dispatcher.pollFirst();
 					this.packetsDropped++;
 				}
-				for (int k = 0; k < this.numIntRouters; k++) {
-					this.totalServiceTimePerPacket += this.routers.get(k).check(this.totalServiceTime);
-				}
-
+			}
+			for (int k = 0; k < this.numIntRouters; k++) {
+				this.totalServiceTimePerPacket += this.routers.get(k).check(this.totalServiceTime);
 			}
 			this.status();
 		}while (++this.totalServiceTime-1 < this.duration);

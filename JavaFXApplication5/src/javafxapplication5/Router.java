@@ -33,7 +33,7 @@ public class Router extends LinkedList {
 		Packet a = new Packet();
 		if (!((Packet) this.packets).isEmpty() && ((Packet) this.packets.peekFirst()).isDone()) {
 			a = ((Packet) this.packets.pollFirst());
-			System.out.printf("Packet %d has successfully reached its destination: +%d%n", a.getId(),
+			Simulator.a+=String.format("Packet %d has successfully reached its destination: +%d%n", a.getId(),
 					time - a.getTimeArrive());
 			return time - a.getTimeArrive();
 		}
